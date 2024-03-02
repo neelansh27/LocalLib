@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-
+const luxon= require('luxon');
 const Schema = mongoose.Schema;
-
 const BookInstanceSchema = new Schema({
   book: { type: Schema.Types.ObjectId, ref: "Book", required: true }, // reference to the associated book
   imprint: { type: String, required: true },
@@ -20,6 +19,9 @@ BookInstanceSchema.virtual("url").get(function () {
   return `/catalog/bookinstance/${this._id}`;
 });
 
+BookInstanceSchema.virtual("due_back_formatted").get(function () {
+  return luxon.DateTime.fromJSDate(this.due_back).toLocaleString(luxon.DateTime.DATE_MED);
+});
 // Export model
 module.exports = mongoose.model("BookInstance", BookInstanceSchema);
 

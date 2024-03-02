@@ -1,14 +1,36 @@
+const Book = require("../models/book");
 const Genre = require("../models/genre");
 const asyncHandler = require("express-async-handler");
 
 // Display list of all Genre.
 exports.genre_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Genre list");
+  const genre_list = await Genre.find({}).sort({ name: 1 });
+  res.render("../views/genre_list.pug", {
+    // Since we have specified the view path in app.js
+    // We dont actually need to specify it like this
+    title: "Genre List",
+    genre_list: genre_list,
+  });
 });
 
 // Display detail page for a specific Genre.
 exports.genre_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Genre detail: ${req.params.id}`);
+  console.log(req.params.id);
+  
+  const [genre, booksInGenre] = await Promise.all([
+    Genre.findById(req.params.id).exec(),
+    Book.find({ genre: req.params.id }, "title summary").exec(),
+  ]);
+  if (genre === null) {
+    const err = new Error("Genre Not Found");
+    err.status = 404;
+    return next(err);
+  }
+  res.render("genre_detail", {
+    title: "Genre Details",
+    genre: genre,
+    genre_books: booksInGenre,
+  });
 });
 
 // Display Genre create form on GET.
@@ -40,4 +62,3 @@ exports.genre_update_get = asyncHandler(async (req, res, next) => {
 exports.genre_update_post = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: Genre update POST");
 });
-
