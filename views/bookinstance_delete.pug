@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+  h1 #{title}: #{instance._id}
+  p= instance.book.title
+  p= instance.imprint
+    if instance.status=='Available'
+      p.text-success #{instance.status}
+    else if instance.status=='Maintenance'
+      p.text-danger #{instance.status}
+    else
+      p.text-warning #{instance.status}
+    if instance.status!='Available'
+      p  (Due: #{instance.due_back_formatted} )
+
+    p Do you really want to delete this copy?
+
+    form(method='POST')
+      div.form-group
+        input#instanceId.form-control(type='hidden', name='instanceId', value=instance._id )
+
+      button.btn.btn-primary(type='submit') Delete
+

@@ -33,4 +33,10 @@ AuthorSchema.virtual("lifeline").get(function () {
   } - ${this.date_of_death ? DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED) : "present"}`;
 });
 
+AuthorSchema.virtual("date_of_death_fmt").get(function () {
+  return DateTime.fromJSDate(this.date_of_death).toFormat('y-MM-dd')
+});
+AuthorSchema.virtual("date_of_birth_fmt").get(function () {
+  return DateTime.fromJSDate(this.date_of_birth).toFormat('y-MM-dd')
+});
 module.exports = mongoose.model("Author", AuthorSchema);
