@@ -9,7 +9,6 @@ const mongoose = require('mongoose')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const catalogRouter = require("./routes/catalog");
-const wiki=require('./wiki')
 const app = express();
 
 // view engine setup
@@ -25,7 +24,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/wiki', wiki);
 app.use("/catalog", catalogRouter);
 
 // catch 404 and forward to error handler
